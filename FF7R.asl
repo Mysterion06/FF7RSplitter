@@ -61,7 +61,7 @@ init{
 update{
     //Reset the variables, when the timer isnt running
     if(timer.CurrentPhase == TimerPhase.NotRunning){
-        vars.completedSplits.Clear();
+        vars.CompletedSplits.Clear();
     }
 
     for(int i = 0; i < 10; ++i){
