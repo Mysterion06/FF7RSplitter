@@ -3,18 +3,18 @@
 //Thanks to everyone who tested it
 
 state("ff7remake_"){
-    byte LRT: 0x579D970; //1 in the main loading screens
-    byte LRT2: 0x58B7870; //1 in loading screen after cutscenes
-    byte chapter: 0x59809F0; //1 when loading a chapter (goes to 255 as byte when a chapter ends
-    int BossCurrentHP: 0x0597E2D8, 0x8, 0x18, 0x5E8, 0x18; //Returns the Enemies current HP
-    int BossMaxHP: 0x0597E2D8, 0x8, 0x18, 0x5E8, 0x1C; //Return the Enemies current Max HP
-    byte reset: 0x5365C85; // 1 = ingame; 0 = menu
+    byte LRT:           0x579D970;                                  //1 in the main loading screens
+    byte LRT2:          0x58B7870;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x59809F0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends
+    byte reset:         0x5365C85;                                  // 1 = ingame; 0 = menu
+    int BossMaxHP:      0x0597E2D8, 0x8, 0x18, 0x5E8, 0x1C;         //Return the Enemies current Max HP
+    int BossCurrentHP:  0x0597E2D8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
 }
 
 startup{
     //Asks the user to set his timer to game time on livesplit, which is needed for verification
     if (timer.CurrentTimingMethod == TimingMethod.RealTime) // Inspired by the Modern warfare 3 Autosplitter
-    {        
+    {
         var timingMessage = MessageBox.Show (
             "This game uses Time without Loads (Game Time) as the main timing method.\n"+
             "LiveSplit is currently set to show Real Time (RTA).\n"+
@@ -27,7 +27,7 @@ startup{
         }
     }
 
-    //Variable initilization
+    //Variable initialization
     vars.HPsCur = new int[10];
     vars.HPsMax = new int[10];
 
