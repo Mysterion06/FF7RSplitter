@@ -65,7 +65,7 @@ update{
 
     vars.HPsCur = new int[10];
     //Loop through the Array of EnemyHPs
-    for (int i = 0; i < vars.HPs.Length; ++i)
+    for (int i = 0; i < vars.HPsCur.Length; ++i)
     {
         int HPcur = 0; //Set the Current HP Variable to 0
         IntPtr ptr;
@@ -75,7 +75,7 @@ update{
     }
 
     vars.HPsMax = new int[10];
-    for (int i = 0; i < vars.HPs.Length; ++i)
+    for (int i = 0; i < vars.HPsMax.Length; ++i)
     {
         int HPmax = 0; //Set the MAX HP Variable to 0
         IntPtr ptr;
