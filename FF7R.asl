@@ -27,6 +27,10 @@ startup{
         }
     }
 
+    //Variable initilization
+    vars.HPsCur = new int[10];
+    vars.HPsMax = new int[10];
+
     //Difficulty settings for the Boss splits
     settings.Add("MG", false, "Main Game");
     settings.SetToolTip("MG", "Only check one box at a time (The difficulty you are playing");
@@ -39,9 +43,9 @@ startup{
 
 init{
     //Variable initilization
-    vars.completedSplits = new List<int>();
+    vars.CompletedSplits = new List<int>();
 
-    vars.chapterSplits = new List<int>()
+    vars.ChapterSplits = new List<int>()
 	{2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22};
 
     vars.BossSplitsEasy = new List<int>()
@@ -56,32 +60,13 @@ init{
 
 update{
     //Reset the variables, when the timer isnt running
-    if (timer.CurrentPhase == TimerPhase.NotRunning)
-    {
+    if(timer.CurrentPhase == TimerPhase.NotRunning){
 		vars.completedSplits.Clear();
     }
 
-    vars.itemPtr = 0x0597E2D8; //Base Address
-
-    vars.HPsCur = new int[10];
-    //Loop through the Array of EnemyHPs
-    for (int i = 0; i < vars.HPsCur.Length; ++i)
-    {
-        int HPcur = 0; //Set the Current HP Variable to 0
-        IntPtr ptr;
-        new DeepPointer(vars.itemPtr, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x18).DerefOffsets(memory, out ptr); //Create a DeepPointer for the base + offset
-        memory.ReadValue<int>(ptr, out HPcur); //Read the Current HP Value and output it on the CurrentHP
-        vars.HPsCur[i] = HPcur; //Give the Array the Current HP value
-    }
-
-    vars.HPsMax = new int[10];
-    for (int i = 0; i < vars.HPsMax.Length; ++i)
-    {
-        int HPmax = 0; //Set the MAX HP Variable to 0
-        IntPtr ptr;
-        new DeepPointer(vars.itemPtr, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x1C).DerefOffsets(memory, out ptr); //Create a DeepPointer for the base + offset
-        memory.ReadValue<int>(ptr, out HPmax); //Read the Max HP Value and output it on the HPMax
-        vars.HPsMax[i] = HPmax; //Give the Array the HP Max value
+    for(int i = 0; i < 10; ++i){
+        vars.HPsCur[i] = new DeepPointer(0x597E2D8, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x18).Deref<int>(game);
+        vars.HPsMax[i] = new DeepPointer(0x597E2D8, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x1C).Deref<int>(game);
     }
 }
 
@@ -93,8 +78,8 @@ start{
 
 split{
     //Chapter Splits Main Game & Yuffie%
-    if(old.chapter == 255 && vars.chapterSplits.Contains(current.chapter) && !vars.completedSplits.Contains(current.chapter)){
-        vars.completedSplits.Add(current.chapter);
+    if(old.chapter == 255 && vars.ChapterSplits.Contains(current.chapter) && !vars.CompletedSplits.Contains(current.chapter)){
+        vars.CompletedSplits.Add(Current.chapter);
         return true;
     }
 
@@ -114,16 +99,13 @@ split{
     }
 
     //Main splits for Bosses
-    //Create 2 Arrays that return the current HP and the Max HP
-    int[] currentBossHP = (vars.HPsCur as int[]);
-    int[] MaxBossHP = (vars.HPsMax as int[]);
     //Loop through the Length of the BossHPs
-    for(int i = 0; i < currentBossHP.Length; i++){
+    for(int i = 0; i < vars.HPsCur.Length; i++){
         //Check what setting was chosen (difficulty) and if the given List contains the current Max Boss HP and the current BossHP equals 0 and the completed splits dont contain
         //That value anymore, add the current max boss hp value to the completed list and return the split
-        if((settings["BSPE"] && vars.BossSplitsEasy.Contains(MaxBossHP[i]) || settings["BSPN"] && vars.BossSplitsEasy.Contains(MaxBossHP[i]) ||
-        settings["BSPH"] && vars.BossSplitsEasy.Contains(MaxBossHP[i])) && currentBossHP[i] == 0 && !vars.completedSplits.Contains(MaxBossHP[i])){
-            vars.completedSplits.Add(MaxBossHP[i]);
+        if((settings["BSPE"] && vars.BossSplitsEasy.Contains(vars.HPsMax[i]) || settings["BSPN"] && vars.BossSplitsNormal.Contains(vars.HPsMax[i]) ||
+        settings["BSPH"] && vars.BossSplitsHard.Contains(vars.HPsMax[i])) && vars.HPsCur[i] == 0 && !vars.CompletedSplits.Contains(vars.HPsMax[i])){
+            vars.CompletedSplits.Add(vars.HPsMax[i]);
             return true;
         }
     }
