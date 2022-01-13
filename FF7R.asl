@@ -79,7 +79,7 @@ start{
 split{
     //Chapter Splits Main Game & Yuffie%
     if(old.chapter == 255 && vars.ChapterSplits.Contains(current.chapter) && !vars.CompletedSplits.Contains(current.chapter)){
-        vars.CompletedSplits.Add(Current.chapter);
+        vars.CompletedSplits.Add(current.chapter);
         return true;
     }
 
