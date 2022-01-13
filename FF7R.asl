@@ -39,8 +39,6 @@ startup{
 
 init{
     //Variable initilization
-    vars.HPs = new int[10];
-
     vars.completedSplits = new List<int>();
 
     vars.chapterSplits = new List<int>()
@@ -65,6 +63,7 @@ update{
 
     vars.itemPtr = 0x0597E2D8; //Base Address
 
+    vars.HPsCur = new int[10];
     //Loop through the Array of EnemyHPs
     for (int i = 0; i < vars.HPs.Length; ++i)
     {
