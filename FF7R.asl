@@ -46,7 +46,7 @@ init{
     vars.CompletedSplits = new List<int>();
 
     vars.ChapterSplits = new List<int>()
-	{2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22};
+    {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22};
 
     vars.BossSplitsEasy = new List<int>()
     {5188, 4488, 3343, 7092, 18770, 21450, 10276, 23338, 6732, 10771, 43085, 8078, 77484};
@@ -61,7 +61,7 @@ init{
 update{
     //Reset the variables, when the timer isnt running
     if(timer.CurrentPhase == TimerPhase.NotRunning){
-		vars.CompletedSplits.Clear();
+        vars.completedSplits.Clear();
     }
 
     for(int i = 0; i < 10; ++i){
