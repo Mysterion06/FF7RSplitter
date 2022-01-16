@@ -31,6 +31,7 @@ startup{
     //Variable initialization
     vars.HPsCur = new int[10];
     vars.HPsMax = new int[10];
+    vars.WolvesFound = false;
     vars.WolvesBeaten = false;
 
     //Difficulty settings for the Boss splits
@@ -71,11 +72,13 @@ init{
 
     vars.YuffieSplitsHard = new List<int>()
     {11790, 35370, 51876, 12969, 47160, 23580};
+
 }
 
 update{
     if(timer.CurrentPhase == TimerPhase.NotRunning){
         vars.CompletedSplits.Clear();
+        vars.WolvesFound = false;
         vars.WolvesBeaten = false;
     }
 
@@ -143,7 +146,6 @@ split{
     //Yuffie Wolves split exception
     //Make sure we're in correct chapter and check that Wolves aren't already beaten
     if(current.chapter == 21 && !vars.WolvesBeaten){
-        vars.WolvesFound = false;
         vars.EnemiesBeaten = true;
 
         //Loop through the Length of the BossHPs
