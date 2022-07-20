@@ -103,13 +103,13 @@ split{
 
     //Final Split Main Game
     if((current.BossMaxHP == 35836 || current.BossMaxHP == 65157 || current.BossMaxHP == 87246) &&
-        current.BossCurrentHP == 0 && old.BossCurrentHP > 1 && current.chapter == 18 && settings["MG"]){
+        current.BossCurrentHP == 0 && old.BossCurrentHP > 0 && current.chapter == 18 && settings["MG"]){
         return true;
     }
 
     //Final Split Yuffie%
     if((current.BossMaxHP == 39336 || current.BossMaxHP == 71520 || current.BossMaxHP == 94320) &&
-        current.BossCurrentHP == 0 && old.BossCurrentHP > 1 && current.chapter == 22 && settings["Yuffie"]){
+        current.BossCurrentHP == 0 && old.BossCurrentHP > 0 && current.chapter == 22 && settings["Yuffie"]){
         return true;
     }
 
@@ -117,12 +117,12 @@ split{
     if((settings["YSPE"] && current.BossMaxHP == 3941 && vars.CompletedSplits.Contains(3941) ||
         settings["YSPN"] && current.BossMaxHP == 7165 && vars.CompletedSplits.Contains(7165) || 
         settings["YSPH"] && current.BossMaxHP == 11790 && vars.CompletedSplits.Contains(11790)) 
-        && current.chapter == 21 && current.BossCurrentHP == 0 && old.BossCurrentHP >= 1){
+        && current.chapter == 21 && current.BossCurrentHP == 0 && old.BossCurrentHP > 0){
         return true;
     }
 
     //Exception split for Yuffie Hard Mode (Armored Magitrooper)
-    if(settings["YSPH"] && current.chapter == 22 && current.BossMaxHP == 3537 && current.BossCurrentHP == 0 && old.BossCurrentHP >= 1){
+    if(settings["YSPH"] && current.chapter == 22 && current.BossMaxHP == 3537 && current.BossCurrentHP == 0 && old.BossCurrentHP > 0){
         return true;
     }
 
