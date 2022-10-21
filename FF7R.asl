@@ -80,9 +80,11 @@ init{
     var hash = vars.CalcModuleHash(module);
     if (hash == "046AAAB7CA36E35A575DDD564AB493E1") {
         version = "v1.0.0.0 (Steam)";
+        vars.offset = 0x8230;
     }
     else if (hash == "CDCA7F07F804A267E17A37F4E83936B7") {
         version = "v1.0.0.1 (EGS)";
+        vars.offset = 0;
     }
     else {
         version = "NONE";
@@ -122,8 +124,8 @@ update{
     }
 
     for(int i = 0; i < 10; ++i){
-        vars.HPsCur[i] = new DeepPointer(0x597E2D8, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x18).Deref<int>(game);
-        vars.HPsMax[i] = new DeepPointer(0x597E2D8, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x1C).Deref<int>(game);
+        vars.HPsCur[i] = new DeepPointer(0x597E2D8 + vars.offset, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x18).Deref<int>(game);
+        vars.HPsMax[i] = new DeepPointer(0x597E2D8 + vars.offset, 0x8, 0x18 + (i * 0x150), 0x5E8, 0x1C).Deref<int>(game);
     }
 }
 
