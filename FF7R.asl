@@ -3,12 +3,21 @@
 //Thanks to everyone who tested it
 //Thanks to DesertEagle417 for creating the Yuffie section
 
-state("ff7remake_"){
+state("ff7remake_", "v1.0.0.0 (Steam)"){
+    byte LRT:           0x57A5A70;                                  //1 in the main loading screens
+    byte LRT2:          0x58BF970;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x5988C20;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x5374210;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x05986508, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
+    int BossCurrentHP:  0x05986508, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
+}
+
+state("ff7remake_", "v1.0.0.1 (EGS)"){
     byte LRT:           0x579D970;                                  //1 in the main loading screens
     byte LRT2:          0x58B7870;                                  //1 in loading screen after cutscenes
-    byte chapter:       0x59809F0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends
-    byte reset:         0x5365C85;                                  // 1 = ingame; 0 = menu
-    int BossMaxHP:      0x0597E2D8, 0x8, 0x18, 0x5E8, 0x1C;         //Return the Enemies current Max HP
+    byte chapter:       0x59809F0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x5365C85;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x0597E2D8, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
     int BossCurrentHP:  0x0597E2D8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
 }
 
@@ -46,9 +55,39 @@ startup{
         settings.Add("YSPE", false, "Yuffie Splits Easy", "Yuffie");
         settings.Add("YSPN", false, "Yuffie Splits Normal", "Yuffie");
         settings.Add("YSPH", false, "Yuffie Splits Hard", "Yuffie");
+
+    //Based on: https://github.com/tduva/LiveSplit-ASL/
+    Func<ProcessModuleWow64Safe, string> CalcModuleHash = (module) => {
+        byte[] exeHashBytes = new byte[0];
+        using (var sha = System.Security.Cryptography.MD5.Create())
+        {
+            using (var s = File.Open(module.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                exeHashBytes = sha.ComputeHash(s);
+            }
+        }
+        var hash = exeHashBytes.Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
+        return hash;
+    };
+    vars.CalcModuleHash = CalcModuleHash;
 }
 
 init{
+    //Detect game version
+    //Based on: https://github.com/tduva/LiveSplit-ASL/
+    var module = modules.Single(x => String.Equals(x.ModuleName, "ff7remake_.exe", StringComparison.OrdinalIgnoreCase));
+    var moduleSize = module.ModuleMemorySize;
+    var hash = vars.CalcModuleHash(module);
+    if (hash == "046AAAB7CA36E35A575DDD564AB493E1") {
+        version = "v1.0.0.0 (Steam)";
+    }
+    else if (hash == "CDCA7F07F804A267E17A37F4E83936B7") {
+        version = "v1.0.0.1 (EGS)";
+    }
+    else {
+        version = "NONE";
+    }
+
     //Variable initilization
     vars.CompletedSplits = new List<int>();
 
