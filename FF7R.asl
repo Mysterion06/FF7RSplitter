@@ -2,6 +2,7 @@
 //Commissioned by Scruffington
 //Thanks to everyone who tested it
 //Thanks to DesertEagle417 for creating the Yuffie section
+//Thanks to Qwazerty for updating the asl - Added Steam version support
 
 state("ff7remake_", "v1.0.0.0 (Steam)"){
     byte LRT:           0x57A5A70;                                  //1 in the main loading screens
@@ -55,39 +56,18 @@ startup{
         settings.Add("YSPE", false, "Yuffie Splits Easy", "Yuffie");
         settings.Add("YSPN", false, "Yuffie Splits Normal", "Yuffie");
         settings.Add("YSPH", false, "Yuffie Splits Hard", "Yuffie");
-
-    //Based on: https://github.com/tduva/LiveSplit-ASL/
-    Func<ProcessModuleWow64Safe, string> CalcModuleHash = (module) => {
-        byte[] exeHashBytes = new byte[0];
-        using (var sha = System.Security.Cryptography.MD5.Create())
-        {
-            using (var s = File.Open(module.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                exeHashBytes = sha.ComputeHash(s);
-            }
-        }
-        var hash = exeHashBytes.Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
-        return hash;
-    };
-    vars.CalcModuleHash = CalcModuleHash;
 }
 
 init{
-    //Detect game version
-    //Based on: https://github.com/tduva/LiveSplit-ASL/
-    var module = modules.Single(x => String.Equals(x.ModuleName, "ff7remake_.exe", StringComparison.OrdinalIgnoreCase));
-    var moduleSize = module.ModuleMemorySize;
-    var hash = vars.CalcModuleHash(module);
-    if (hash == "046AAAB7CA36E35A575DDD564AB493E1") {
+    switch (modules.First().ModuleMemorySize) {
+        default:
+        version = "v1.0.0.1 (EGS)";
+        vars.offset = 0x0;
+        break;
+        case (99311616):
         version = "v1.0.0.0 (Steam)";
         vars.offset = 0x8230;
-    }
-    else if (hash == "CDCA7F07F804A267E17A37F4E83936B7") {
-        version = "v1.0.0.1 (EGS)";
-        vars.offset = 0;
-    }
-    else {
-        version = "NONE";
+        break;
     }
 
     //Variable initilization
