@@ -14,7 +14,7 @@ state("ff7remake_", "v1.0.0.0 (Steam)"){
     int BossCurrentHP:  0x5986508, 0x8, 0x18, 0x5E8, 0x18;          //Returns the Enemies current HP
 }
 
-state("ff7remake_", "v1.0.0.1 (EGS)"){
+state("ff7remake_", "v1.0.0.2 (EGS)"){
     byte LRT:           0x57B1470;                                  //1 in the main loading screens
     byte LRT2:          0x58CB370;                                  //1 in loading screen after cutscenes
     byte chapter:       0x5994530;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
