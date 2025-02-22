@@ -5,6 +5,7 @@
 //Thanks to Qwazerty for updating the asl - Added Steam version support
 //Updated 20.06.2023 - Thanks to NanakiEmi for finding the new LRT, LRT2, chapter and reset pointer for Epic Version
 //Updated 15.08.2024 - Added newest Steam Support - Mysterion352
+//Updated 20.2.2025 - Updated for 1.0.0.4 for Steam and EGS - Denhonator
 
 state("ff7remake_", "v1.0.0.1 (Steam)"){
     byte LRT:           0x57B94F0;                                  //1 in the main loading screens
@@ -31,6 +32,24 @@ state("ff7remake_", "v1.0.0.0 (EGS)"){
     byte reset:         0x58CB380;                                  //1 = ingame; 0 = menu
     int BossMaxHP:      0x5991E18, 0x8, 0x18, 0x5E8, 0x1C;          //Returns the Enemies current Max HP
     int BossCurrentHP:  0x5991E18, 0x8, 0x18, 0x5E8, 0x18;          //Returns the Enemies current HP
+}
+
+state("ff7remake_", "v1.0.0.4 (EGS)"){
+    byte LRT:           0x57C3870;                                  //1 in the main loading screens
+    byte LRT2:          0x58DD7C8;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x59A6AD0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x58DD7D8;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x59A43B8, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
+    int BossCurrentHP:  0x59A43B8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
+}
+
+state("ff7remake_", "v1.0.0.4 (Steam)"){
+    byte LRT:           0x57CA870;                                  //1 in the main loading screens
+    byte LRT2:          0x58E47C8;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x59ADBF0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x58E47D8;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x59AB4D8, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
+    int BossCurrentHP:  0x59AB4D8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
 }
 
 
@@ -82,6 +101,14 @@ init{
         case (99393536):
         version = "v1.0.0.1 (Steam)";
         vars.offset = 0x8180;
+        break;
+        case (99438592):
+        version = "v1.0.0.4 (EGS)";
+        vars.offset = 0;
+        break;
+		case (99467264):
+        version = "v1.0.0.4 (Steam)";
+        vars.offset = 0x7120;
         break;
     }
 
