@@ -7,6 +7,7 @@
 //Updated 15.08.2024 - Added newest Steam Support - Mysterion352
 //Updated 20.2.2025 - Updated for 1.0.0.4 for Steam and EGS - Denhonator
 //Updated 25.1.2026 - Updated for 1.0.0.6 for Steam and EGS - Denhonator
+//Updated 20.2.2026 - Updated for 1.0.0.7 for Steam and EGS - Denhonator
 
 state("ff7remake_", "v1.0.0.1 (Steam)"){
     byte LRT:           0x57B94F0;                                  //1 in the main loading screens
@@ -71,6 +72,23 @@ state("ff7remake_", "v1.0.0.6 (Steam)"){
     int BossCurrentHP:  0x59CA0D8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
 }
 
+state("ff7remake_", "v1.0.0.7 (EGS)"){
+    byte LRT:           0x57E0970;                                  //1 in the main loading screens
+    byte LRT2:          0x58FA928;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x59C3FF0;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x58FA938;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x59C18D8, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
+    int BossCurrentHP:  0x59C18D8, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
+}
+
+state("ff7remake_", "v1.0.0.7 (Steam)"){
+    byte LRT:           0x57E99F0;                                  //1 in the main loading screens
+    byte LRT2:          0x59039A8;                                  //1 in loading screen after cutscenes
+    byte chapter:       0x59CD160;                                  //1 when loading a chapter (goes to 255 as byte when a chapter ends)
+    byte reset:         0x59039B8;                                  //1 = ingame; 0 = menu
+    int BossMaxHP:      0x59CAA48, 0x8, 0x18, 0x5E8, 0x1C;         //Returns the Enemies current Max HP
+    int BossCurrentHP:  0x59CAA48, 0x8, 0x18, 0x5E8, 0x18;         //Returns the Enemies current HP
+}
 
 startup{
     //Asks the user to set his timer to game time on livesplit, which is needed for verification
@@ -130,12 +148,22 @@ init{
         vars.offset = 0x7120;
         break;
 		case (99561472):
-        version = "v1.0.0.6 (EGS)";
-        vars.offset = 0x30180;
+		if(memory.ReadValue<int>(modules.First().BaseAddress+0x5DB5E78) == 7) {
+			version = "v1.0.0.7 (EGS)";
+			vars.offset = 0x2FAC0;
+		}
+		else {
+			version = "v1.0.0.6 (EGS)";
+			vars.offset = 0x30180;
+		}
         break;
 		case (99594240):
         version = "v1.0.0.6 (Steam)";
         vars.offset = 0x382C0;
+        break;
+		case (99598336):
+        version = "v1.0.0.7 (Steam)";
+        vars.offset = 0x38C30;
         break;
     }
 
